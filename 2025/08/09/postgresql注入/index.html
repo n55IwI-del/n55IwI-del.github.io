@@ -304,7 +304,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1&#x27;union+select+1,usename,passwd+from+pg_shadow+limit+1+offset+0--</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809181256999.png" alt="image-20250809181256999"></p>
-<p>这里没有解开，如果用的是弱口令大概率也是可以解开的。但是此处需要注意，查出来的md5值不只是密码的，而且密码加用户名组合的md5值。</p>
+<p>这里没有解开，如果用的是弱口令大概率也是可以解开的。但是此处需要注意，查出来的md5值不只是密码的，而是密码加用户名组合的md5值。</p>
 <p>我这里本地用的密码sqladmin,那查出来的md5值应该就是密码加用户名也就是sqladminpostgres的md5。</p>
 <p>没错了，就是这样。</p>
 <p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809181610768.png" alt="image-20250809181610768"></p>
